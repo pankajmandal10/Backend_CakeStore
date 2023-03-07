@@ -94,6 +94,18 @@ router.post("/verify", (req, res) => {
   });
 });
 
+router.put("/updateuser/:id", async (req, res) => {
+  // getting id from URL param
+  const { id } = req.params;
+  const { address } = req.body;
+  const index = await User.updateOne(
+    { _id: id },
+    { $set: { address: address } }
+  );
+  console.warn(index);
+  res.send(index);
+});
+
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
