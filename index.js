@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 require("./db");
 require("./cakeshop/modals/User");
 require("./cakeshop/modals/Product");
+require("./cakeshop/modals/LoggedUser");
 //
 const authRoutes = require("./cakeshop/routes/authRoutes");
 const ProductRoute = require("./cakeshop/routes/ProductRoute");

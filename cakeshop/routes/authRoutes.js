@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const LoggedUser = mongoose.model("loggeduser");
 const jwt = require("jsonwebtoken");
 //
 require("dotenv").config();
@@ -112,7 +113,7 @@ router.post("/signin", async (req, res) => {
     return res.status(422).json({ error: "Please add email or password" });
   }
   const savedUser = await User.findOne({ email: email });
-  console.warn("saveUser", savedUser);
+  // console.warn("saveUser", savedUser);
   if (!savedUser) {
     return res.status(422).json({ error: "Invalid Credentials" });
   }
@@ -131,6 +132,12 @@ router.post("/signin", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+router.get("/getloggeduser", async (req, res) => {
+  const savedUser = await LoggedUser.find({}).limit(50);
+  res.send(ProductList).status(200);
+  console.warn("dtds", savedUser);
 });
 
 module.exports = router;
