@@ -136,7 +136,7 @@ router.post("/signin", async (req, res) => {
 
 router.get("/getloggeduser", async (req, res) => {
   const savedUser = await LoggedUser.find({}).limit(50);
-  res.send(ProductList).status(200);
+  res.send(savedUser).status(200);
   console.warn("dtds", savedUser);
 });
 
