@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
-const LoggedUser = mongoose.model("loggeduser");
 const jwt = require("jsonwebtoken");
 //
 require("dotenv").config();
@@ -134,10 +133,13 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/getloggeduser", async (req, res) => {
-  const savedUser = await LoggedUser.find({}).limit(50);
-  res.send(savedUser).status(200);
-  console.warn("dtds", savedUser);
+router.get("/getloggedUser/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const data = await User.findById(id).limit(50);
+    res.send(data).status(200);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
-
 module.exports = router;
