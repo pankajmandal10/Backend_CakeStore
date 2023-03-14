@@ -4,6 +4,9 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  key: {
+    type: String,
+  },
   price: {
     type: Number,
     require: true,
@@ -25,3 +28,4 @@ const ProductSchema = new mongoose.Schema({
 });
 
 mongoose.model("products", ProductSchema);
+mongoose.model("savedproducts", ProductSchema);
