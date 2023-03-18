@@ -10,23 +10,45 @@ router.get("/productlist", async (req, resp) => {
   resp.send(ProductList).status(200);
 });
 
-router.post("/api/v1/addcartpost/:id", async (req, res) => {
-  const { key, title, price, description, category, image, rating } = req.body;
-  console.warn(req.body);
-  console.warn(req.params.id);
-  let availbleData = await savedProducts.findOne({ key: req.params.id });
-  console.warn("try", availbleData);
-  if (availbleData != null) {
+router.post("/addcartpost/:userId/:id", async (req, res) => {
+  // console.warn(req.params);
+  const {
+    key,
+    userId,
+    qty = 1,
+    title,
+    price,
+    updatedPrice,
+    description,
+    category,
+    image,
+    rating,
+  } = req.body;
+  // console.warn(req.body);
+  let availbleData = await savedProducts.find({
+    key: req.params.id,
+    userId: req.params.userId,
+  });
+  console.warn("try", availbleData, availbleData != null);
+  if (availbleData.length !== 0) {
     await savedProducts.updateOne(
       { key },
-      { $set: { price: availbleData.price + price } }
+      {
+        $set: {
+          updatedPrice: availbleData[0].updatedPrice + price,
+          qty: updatedData[0].qty + 1,
+        },
+      }
     );
     res.send("Successfully Update");
   } else {
     const cart = new savedProducts({
       key,
+      userId,
+      qty,
       title,
       price,
+      updatedPrice,
       description,
       category,
       image,
@@ -41,3 +63,50 @@ router.post("/api/v1/addcartpost/:id", async (req, res) => {
   }
 });
 module.exports = router;
+
+router.get("/getaddetocartdata/:userId", async (req, resp) => {
+  const addedProductList = await savedProducts
+    .find({ userId: req.params.userId })
+    .limit(50);
+  resp.send(addedProductList).status(200);
+});
+
+router.put("/updatequantity/increment/:productId/:userId", async (req, res) => {
+  const { key, qty = 1, price } = req.body;
+  console.warn(req.body);
+  const updatedData = await savedProducts.find({
+    key: req.params.productId,
+    userId: req.params.userId,
+  });
+  console.warn(updatedData);
+  await savedProducts.updateOne(
+    { key },
+    {
+      $set: {
+        updatedPrice: updatedData[0].updatedPrice + price,
+        qty: updatedData[0].qty + 1,
+      },
+    }
+  );
+  res.send("Successfully Inc Qty Update");
+});
+
+router.put("/updatequantity/decrement/:productId/:userId", async (req, res) => {
+  const { key, qty = 1, price } = req.body;
+  console.warn(req.body);
+  const updatedData = await savedProducts.find({
+    key: req.params.productId,
+    userId: req.params.userId,
+  });
+  console.warn(updatedData);
+  await savedProducts.updateOne(
+    { key },
+    {
+      $set: {
+        updatedPrice: updatedData[0].updatedPrice - price,
+        qty: updatedData[0].qty - 1,
+      },
+    }
+  );
+  res.send("Successfully Dec Qty Update");
+});

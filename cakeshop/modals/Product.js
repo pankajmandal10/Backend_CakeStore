@@ -7,9 +7,18 @@ const ProductSchema = new mongoose.Schema({
   key: {
     type: String,
   },
+  userId: {
+    type: String,
+  },
+  qty: {
+    type: Number,
+  },
   price: {
     type: Number,
     require: true,
+  },
+  updatedPrice: {
+    type: Number,
   },
   description: {
     type: String,
