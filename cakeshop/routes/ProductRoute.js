@@ -12,31 +12,20 @@ router.get("/productlist", async (req, resp) => {
 
 router.post("/addcartpost/:userId/:id", async (req, res) => {
   // console.warn(req.params);
-  const {
-    key,
-    userId,
-    qty = 1,
-    title,
-    price,
-    updatedPrice,
-    description,
-    category,
-    image,
-    rating,
-  } = req.body;
-  // console.warn(req.body);
+  const { key, userId, qty = 1, updatedPrice, product } = req.body;
+  console.warn(req.body);
   let availbleData = await savedProducts.find({
     key: req.params.id,
     userId: req.params.userId,
   });
-  console.warn("try", availbleData, availbleData != null);
+  console.warn("try", availbleData);
   if (availbleData.length !== 0) {
     await savedProducts.updateOne(
       { key },
       {
         $set: {
-          updatedPrice: availbleData[0].updatedPrice + price,
-          qty: updatedData[0].qty + 1,
+          updatedPrice: availbleData[0].updatedPrice + product.price,
+          qty: availbleData[0].qty + 1,
         },
       }
     );
@@ -46,13 +35,8 @@ router.post("/addcartpost/:userId/:id", async (req, res) => {
       key,
       userId,
       qty,
-      title,
-      price,
       updatedPrice,
-      description,
-      category,
-      image,
-      rating,
+      product,
     });
     try {
       await cart.save();
