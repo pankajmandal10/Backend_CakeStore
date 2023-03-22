@@ -94,3 +94,9 @@ router.put("/updatequantity/decrement/:productId/:userId", async (req, res) => {
   );
   res.send("Successfully Dec Qty Update");
 });
+
+router.delete("/deleteproduct/:userId/:productId", async (req, res) => {
+  const query = { key: req.params.productId, userId: req.params.userId };
+  await savedProducts.deleteOne(query);
+  res.send("Product Deleted Succesfully");
+});
