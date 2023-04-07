@@ -6,8 +6,12 @@ const Products = mongoose.model("products");
 const savedProducts = mongoose.model("savedproducts");
 
 router.get("/productlist", async (req, resp) => {
-  const ProductList = await Products.find({}).limit(50);
-  resp.send(ProductList).status(200);
+  try {
+    const ProductList = await Products.find({}).limit(50);
+    resp.json(ProductList);
+  } catch (err) {
+    resp.sendStatus(500);
+  }
 });
 
 router.post("/addcartpost/:userId/:id", async (req, res) => {

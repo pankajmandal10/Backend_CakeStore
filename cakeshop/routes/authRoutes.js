@@ -55,7 +55,6 @@ router.post("/signup", async (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     res.send({ message: "User Registered Successfully", token });
   } catch (err) {
-    console.log(err);
     return res.status(422).send({ error: "Invalid Credentials" });
   }
 });
