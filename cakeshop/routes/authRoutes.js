@@ -41,7 +41,6 @@ async function mailer(recieveremail, code) {
 //
 
 router.post("/signup", async (req, res) => {
-  console.log("sent by client - ", req.body);
   const { name, email, password, phone, address } = req.body;
   const user = new User({
     name,
@@ -51,7 +50,8 @@ router.post("/signup", async (req, res) => {
     address,
   });
   try {
-    await user.save();
+    const result = await user.save();
+    console.warn("result", result);
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     res.send({ message: "User Registered Successfully", token });
   } catch (err) {

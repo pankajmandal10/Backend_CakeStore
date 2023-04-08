@@ -61,42 +61,44 @@ router.get("/getaddetocartdata/:userId", async (req, resp) => {
 
 router.put("/updatequantity/increment/:productId/:userId", async (req, res) => {
   const { key, qty = 1, price } = req.body;
-  console.warn(req.body);
-  const updatedData = await savedProducts.find({
-    key: req.params.productId,
-    userId: req.params.userId,
-  });
-  console.warn(updatedData);
-  await savedProducts.updateOne(
-    { key },
-    {
-      $set: {
-        updatedPrice: updatedData[0].updatedPrice + price,
-        qty: updatedData[0].qty + 1,
-      },
+  const query = { key: req.params.productId, userId: req.params.userId };
+  const updatedData = await savedProducts.find(query);
+  const update = {
+    $set: {
+      updatedPrice: updatedData[0].updatedPrice + price,
+      qty: updatedData[0].qty + 1,
+    },
+  };
+  savedProducts.updateOne(query, update, function (err, result) {
+    if (err) {
+      res.status(500).send("Error updating document");
+      return;
     }
-  );
-  res.send("Successfully Inc Qty Update");
+    console.log("1 document updated");
+    res.status(200).send("Updated Quntity").end();
+  });
 });
 
 router.put("/updatequantity/decrement/:productId/:userId", async (req, res) => {
   const { key, qty = 1, price } = req.body;
-  console.warn(req.body);
+  const query = { key: req.params.productId, userId: req.params.userId };
   const updatedData = await savedProducts.find({
     key: req.params.productId,
     userId: req.params.userId,
   });
-  console.warn(updatedData);
-  await savedProducts.updateOne(
-    { key },
-    {
-      $set: {
-        updatedPrice: updatedData[0].updatedPrice - price,
-        qty: updatedData[0].qty - 1,
-      },
+  const update = {
+    $set: {
+      updatedPrice: updatedData[0].updatedPrice - price,
+      qty: updatedData[0].qty - 1,
+    },
+  };
+  savedProducts.updateOne(query, update, function (err, result) {
+    if (err) {
+      res.status(500).send("Error updating document");
+      return;
     }
-  );
-  res.send("Successfully Dec Qty Update");
+    res.status(200).send("Deleted item").end();
+  });
 });
 
 router.delete("/deleteproduct/:userId/:productId", async (req, res) => {
