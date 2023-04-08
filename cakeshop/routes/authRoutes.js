@@ -55,7 +55,7 @@ router.post("/signup", async (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     res.send({ message: "User Registered Successfully", token });
   } catch (err) {
-    return res.status(422).send("Invalid Credentials");
+    return res.status(422).send({ error: "Invalid Credentials" });
   }
 });
 
@@ -113,7 +113,7 @@ router.post("/signin", async (req, res) => {
   const savedUser = await User.findOne({ email: email });
   // console.warn("saveUser", savedUser);
   if (!savedUser) {
-    return res.status(422).json("Invalid Credentials");
+    return res.status(422).json({ error: "Invalid Credentials" });
   }
 
   try {
