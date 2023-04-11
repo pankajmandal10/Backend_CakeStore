@@ -102,10 +102,13 @@ router.put("/updatequantity/decrement/:productId/:userId", async (req, res) => {
 });
 
 // product search api
-router.get("/productSearch/:name", async (req, res) => {
-  const name = req.params.name;
-  console.warn(name);
-  const query = { title: { $regex: name, $options: "i" } };
+router.get("/api/productSearch", async (req, res) => {
+  const name = req.query.name;
+  console.warn("name", name);
+  // const query = { title: { $regex: name, $options: "i" } };
+  const query = req.query.name
+    ? { title: { $regex: name, $options: "i" } }
+    : {};
   console.warn("query", query);
   try {
     const products = await Products.find(query);
