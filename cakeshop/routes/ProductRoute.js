@@ -119,6 +119,24 @@ router.get("/api/productSearch", async (req, res) => {
   }
 });
 
+// Product Search By Category
+router.get("/api/productSearchByCategory", async (req, res) => {
+  const name = req.query.category;
+  console.warn("name", name);
+  // const query = { title: { $regex: name, $options: "i" } };
+  const query = req.query.category
+    ? { category: { $regex: name, $options: "i" } }
+    : {};
+  console.warn("query", query);
+  try {
+    const products = await Products.find(query);
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 router.delete("/deleteproduct/:userId/:productId", async (req, res) => {
   const query = { key: req.params.productId, userId: req.params.userId };
   await savedProducts.deleteOne(query);
