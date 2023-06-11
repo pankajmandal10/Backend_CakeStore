@@ -144,8 +144,7 @@ router.delete("/deleteproduct/:userId/:productId", async (req, res) => {
   res.send("Product Deleted Succesfully");
 });
 
-router.post("/api/v1/orderdPorduct/:userId", async (req, res) => {
-  console.warn("innnn");
+router.post("/api/v1/orderedPorduct/:userId", async (req, res) => {
   // Insert the posts into the collection
   const postData = req.body;
   if (!Array.isArray(postData)) {
@@ -153,7 +152,6 @@ router.post("/api/v1/orderdPorduct/:userId", async (req, res) => {
     postData = [postData];
   }
   orderedItem.insertMany(postData, (err, result) => {
-    console.warn(result);
     if (err) {
       console.error("Error creating posts:", err);
       res.status(500).send("Error creating posts");
@@ -162,4 +160,15 @@ router.post("/api/v1/orderdPorduct/:userId", async (req, res) => {
 
     res.status(201).json(result.ops); // Return the created posts
   });
+});
+
+router.get("/api/v1/orderedPorductGet/:userId", async (req, res) => {
+  try {
+    const ProductList = await orderedItem
+      .find({ userId: req.params.userId })
+      .limit(50);
+    res.json(ProductList);
+  } catch (err) {
+    res.sendStatus(500);
+  }
 });
