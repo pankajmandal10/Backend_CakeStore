@@ -41,3 +41,4 @@ const ProductSchema = new mongoose.Schema({
 
 mongoose.model("products", ProductSchema);
 mongoose.model("savedproducts", ProductSchema);
+mongoose.model("orderedItem", ProductSchema);

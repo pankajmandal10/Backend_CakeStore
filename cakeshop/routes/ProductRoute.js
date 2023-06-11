@@ -4,6 +4,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Products = mongoose.model("products");
 const savedProducts = mongoose.model("savedproducts");
+const orderedItem = mongoose.model("orderedItem");
 
 router.get("/productlist", async (req, resp) => {
   try {
@@ -141,4 +142,24 @@ router.delete("/deleteproduct/:userId/:productId", async (req, res) => {
   const query = { key: req.params.productId, userId: req.params.userId };
   await savedProducts.deleteOne(query);
   res.send("Product Deleted Succesfully");
+});
+
+router.post("/api/v1/orderdPorduct/:userId", async (req, res) => {
+  console.warn("innnn");
+  // Insert the posts into the collection
+  const postData = req.body;
+  if (!Array.isArray(postData)) {
+    // If the postData is not an array, convert it to an array
+    postData = [postData];
+  }
+  orderedItem.insertMany(postData, (err, result) => {
+    console.warn(result);
+    if (err) {
+      console.error("Error creating posts:", err);
+      res.status(500).send("Error creating posts");
+      return;
+    }
+
+    res.status(201).json(result.ops); // Return the created posts
+  });
 });
