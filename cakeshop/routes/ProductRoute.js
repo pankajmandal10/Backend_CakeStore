@@ -173,11 +173,8 @@ router.get("/api/v1/orderedPorductGet/:userId", async (req, res) => {
   }
 });
 
-router.delete(
-  "/api/v1/checkoutOrdered/:userId/:productId",
-  async (req, res) => {
-    const query = { key: req.params.productId, userId: req.params.userId };
-    await savedProducts.deleteMany(query);
-    res.send("Product Deleted Succesfully");
-  }
-);
+router.delete("/api/v1/checkoutOrdered/:userId", async (req, res) => {
+  const query = { userId: req.params.userId };
+  await savedProducts.deleteMany(query);
+  res.send("Product Deleted Succesfully");
+});
