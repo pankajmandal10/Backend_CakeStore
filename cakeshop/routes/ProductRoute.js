@@ -206,3 +206,15 @@ router.post(
     }
   }
 );
+
+router.get("/api/v1/wishlistItemGet/:userId", async (req, res) => {
+  try {
+    const ProductList = await userWishList
+      .find({ userId: req.params.userId })
+      .limit(50);
+    res.json(ProductList);
+    console.warn(ProductList);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
