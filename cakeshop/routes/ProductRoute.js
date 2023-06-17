@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const Products = mongoose.model("products");
 const savedProducts = mongoose.model("savedproducts");
 const orderedItem = mongoose.model("orderedItem");
+const userWishList = mongoose.model("userwishlists");
 
 router.get("/productlist", async (req, resp) => {
   try {
@@ -178,3 +179,30 @@ router.delete("/api/v1/checkoutOrdered/:userId", async (req, res) => {
   await savedProducts.deleteMany(query);
   res.send("Product Deleted Succesfully");
 });
+
+router.post(
+  "/api/v1/addProductToWishList/:userId/:productId",
+  async (req, res) => {
+    const product = req.body;
+    if (product.wishListStatus === true) {
+      console.warn("if me");
+      const newPost = new userWishList({ product, userId: req.params.userId });
+      console.warn("product", product);
+      try {
+        await newPost.save();
+        res.send({ message: "Added to wishlist Successfully" });
+      } catch (error) {
+        return res.status(422).send({ error: "Invalid" });
+      }
+    } else {
+      console.warn("else me");
+      try {
+        const query = { userId: req.params.userId };
+        await userWishList.deleteOne(query);
+        res.send("Product Deleted Succesfully");
+      } catch (error) {
+        return res.status(422).send({ error: "Invalid" });
+      }
+    }
+  }
+);
