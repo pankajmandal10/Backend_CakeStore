@@ -197,7 +197,7 @@ router.post(
     } else {
       console.warn("else me");
       try {
-        const query = { userId: req.params.userId };
+        const query = { _id: req.params.productId, userId: req.params.userId };
         await userWishList.deleteOne(query);
         res.send("Product Deleted Succesfully");
       } catch (error) {
