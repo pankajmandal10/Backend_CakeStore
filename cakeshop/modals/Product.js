@@ -42,4 +42,4 @@ const ProductSchema = new mongoose.Schema({
 mongoose.model("products", ProductSchema);
 mongoose.model("savedproducts", ProductSchema);
 mongoose.model("orderedItem", ProductSchema);
-mongoose.model("userwishlists", ProductSchema);
+mongoose.model("userwishlist", ProductSchema);

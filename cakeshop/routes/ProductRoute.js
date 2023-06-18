@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Products = mongoose.model("products");
 const savedProducts = mongoose.model("savedproducts");
 const orderedItem = mongoose.model("orderedItem");
-const userWishList = mongoose.model("userwishlists");
+const userWishList = mongoose.model("userwishlist");
 
 router.get("/productlist", async (req, resp) => {
   try {
